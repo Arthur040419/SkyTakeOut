@@ -94,7 +94,6 @@ public class EmployeeController {
 
     /**
      * 分页查询员工
-     *
      * @param employeePageQueryDTO
      * @return
      */
@@ -107,4 +106,49 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 启用或禁用员工账户
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用或禁用员工账户")
+    public Result startOrStop(@PathVariable Integer status,Long id){
+        log.info("启用或禁用员工账户,status:{},id:{}",status,id);
+        employeeService.startOrStop(status,id);
+        return Result.success();
+    }
+
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> selectById(@PathVariable Long id){
+        log.info("根据id查询员工信息");
+        Employee employee = employeeService.selectById(id);
+        //为了防止密码泄露，还可以将查询出来的员工信息中的密码修改一下
+        employee.setPassword("***");
+
+        return Result.success(employee);
+    }
+
+
+    /**
+     * 修改员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    //由于接收的是JSON格式的数据，所以不要忘了添加@RequestBody注解
+    public Result update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("修改员工信息{}",employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+
+    }
 }

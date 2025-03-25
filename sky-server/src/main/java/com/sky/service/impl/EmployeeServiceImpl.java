@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //密码比对
         // 对明文密码进行md5加密处理
-        password=DigestUtils.md5DigestAsHex(password.getBytes());
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
@@ -69,13 +69,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * 添加员工
+     *
      * @param employeeDTO
      */
     @Override
     public void save(EmployeeDTO employeeDTO) {
         //首先进行属性拷贝，将DTO中的属性拷贝到entity中
         Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
+        BeanUtils.copyProperties(employeeDTO, employee);
 
         //完善员工实体类对象的数据
         //设置密码默认为123456
@@ -93,19 +94,79 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    /**
+     * 分页查询员工信息
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
     @Override
     public PageResult page(EmployeePageQueryDTO employeePageQueryDTO) {
         //设置分页参数
-        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
 
         //直接执行查询
-        Page<Employee> pageResult =  employeeMapper.pageQuery(employeePageQueryDTO);
+        Page<Employee> pageResult = employeeMapper.pageQuery(employeePageQueryDTO);
 
         //封装查询结果
         long total = pageResult.getTotal();
         List<Employee> records = pageResult.getResult();
 
-        return new PageResult(total,records);
+        return new PageResult(total, records);
+    }
+
+
+    /**
+     * 启用或禁用员工账户
+     *
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        //原始方法，新建一个对象，然后给对象的属性一个一个赋值
+//        Employee employee = new Employee();
+//        employee.setStatus(status);
+//        employee.setId(id);
+
+        //使用构造器来构建对象
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee selectById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        return employee;
+    }
+
+    /**
+     * 修改员工信息
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+
+        //完善修改信息
+        //修改更新时间
+        employee.setUpdateTime(LocalDateTime.now());
+        //修改更新操作人的id
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
+
     }
 
 

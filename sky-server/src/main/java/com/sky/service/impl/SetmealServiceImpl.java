@@ -135,10 +135,13 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public void startOrStop(Integer status, Long id) {
         //判断当前套餐中是否有未起售的菜品
-        List<Dish> dishes = setmealDishMapper.getDishes(id);
-        for (Dish dish : dishes) {
-            if(dish.getStatus()==StatusConstant.DISABLE){
-                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+
+        if (status==StatusConstant.ENABLE) {
+            List<Dish> dishes = setmealDishMapper.getDishes(id);
+            for (Dish dish : dishes) {
+                if(dish.getStatus()==StatusConstant.DISABLE){
+                    throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
             }
         }
 

@@ -6,3 +6,9 @@ sky:
     database: sky_take_out
     username: root
     password: gt1303190518
+
+  alioss:
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+    bucket-name: arthur-sky-takeout
+    region: cn-beijing
+    file-path: dishImages/

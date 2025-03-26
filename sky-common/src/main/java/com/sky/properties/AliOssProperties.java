@@ -9,9 +9,13 @@ import org.springframework.stereotype.Component;
 @Data
 public class AliOssProperties {
 
+    //桶地址
     private String endpoint;
-    private String accessKeyId;
-    private String accessKeySecret;
+    //桶名称
     private String bucketName;
+    //桶所在区域
+    private String region;
+    //文件存储路径
+    private String filePath;
 
 }

@@ -2,11 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealDishMapper">
+    <insert id="insertBatch">
+        insert into setmeal_dish(setmeal_id, dish_id, name, price, copies) values 
+        <foreach collection="dishes" item="dish" separator=",">
+            (#{dish.setmealId},#{dish.dishId},#{dish.name},#{dish.price},#{dish.copies})
+        </foreach>
+
+    </insert>
+    <delete id="deleteBySetmealIds">
+        delete from setmeal_dish where setmeal_id in 
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="selectByDishId" resultType="java.lang.Long">
         select id from setmeal_dish where dish_id in
         <foreach collection="DishIds" item="DishId" open="(" close=")" separator=",">
             #{DishId}
         </foreach>
+    </select>
+
+    <select id="getDishes" resultType="com.sky.entity.Dish">
+        select d.* from setmeal_dish sd left join dish d on sd.dish_id = d.id where setmeal_id=#{setmealId}
     </select>
 </mapper>

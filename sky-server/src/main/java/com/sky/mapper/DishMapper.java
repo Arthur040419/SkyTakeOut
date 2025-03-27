@@ -22,7 +22,7 @@ public interface DishMapper {
      * @param categoryId
      * @return
      */
-    @Select("pageQuery count(0) from dish where category_id=#{categoryId}")
+    @Select("select count(0) from dish where category_id=#{categoryId}")
     Integer countDish(Long categoryId);
 
     /**
@@ -50,7 +50,7 @@ public interface DishMapper {
      * @param dishId
      * @return
      */
-    @Select("pageQuery * from dish where id=#{dishId}")
+    @Select("select * from dish where id=#{dishId}")
     Dish selectById(Long dishId);
 
     /**

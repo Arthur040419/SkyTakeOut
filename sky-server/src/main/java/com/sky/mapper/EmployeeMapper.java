@@ -18,7 +18,7 @@ public interface EmployeeMapper {
      * @param username
      * @return
      */
-    @Select("pageQuery * from employee where username = #{username}")
+    @Select("select * from employee where username = #{username}")
     Employee getByUsername(String username);
 
     /**
@@ -51,6 +51,6 @@ public interface EmployeeMapper {
      * @param id
      * @return
      */
-    @Select("pageQuery * from employee where id=#{id}")
+    @Select("select * from employee where id=#{id}")
     Employee selectById(Long id);
 }

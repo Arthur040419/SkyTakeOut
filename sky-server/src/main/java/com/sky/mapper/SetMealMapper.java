@@ -22,7 +22,7 @@ public interface SetMealMapper {
      * @param categoryId
      * @return
      */
-    @Select("pageQuery count(0) from setmeal where category_id=#{categoryId}")
+    @Select("select count(0) from setmeal where category_id=#{categoryId}")
     Integer countSetMeal(Long categoryId);
 
 

@@ -22,6 +22,6 @@ public class DishItemVO implements Serializable {
     //菜品图片
     private String image;
 
-    //菜品描述
+    //菜品描述setmeal_dish
     private String description;
 }

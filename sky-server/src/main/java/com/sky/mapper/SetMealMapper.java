@@ -65,4 +65,11 @@ public interface SetMealMapper {
      * @param ids
      */
     void deleteBatch(List<Long> ids);
+
+    /**
+     * 根据分类id查询套餐
+     * @param categoryId
+     * @return
+     */
+    List<Setmeal> selectByCategoryId(Long categoryId);
 }

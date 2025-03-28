@@ -175,4 +175,16 @@ public class SetmealServiceImpl implements SetmealService {
         setMealMapper.deleteBatch(ids);
 
     }
+
+
+    /**
+     * 根据分类id查询套餐
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Setmeal> list(Long categoryId) {
+        List<Setmeal> setmeals =setMealMapper.selectByCategoryId(categoryId);
+        return setmeals;
+    }
 }

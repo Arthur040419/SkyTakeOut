@@ -46,5 +46,21 @@
             </where>
             order by d.create_time desc
     </select>
+    <select id="selectByDishId" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="categoryId!=null">
+                and category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
+    <select id="selectBySetmealId" resultType="com.sky.vo.DishItemVO">
+        select sd.name,sd.copies,d.image,d.description from setmeal_dish sd left join dish d on d.id = sd.dish_id
+        <where>
+            <if test="setmealId!=null">
+                sd.setmeal_id=#{setmealId}
+            </if>
+        </where>
+    </select>
 
 </mapper>

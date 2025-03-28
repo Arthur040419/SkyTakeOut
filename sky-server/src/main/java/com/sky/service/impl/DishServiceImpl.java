@@ -14,6 +14,7 @@ import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,11 +182,24 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 根据分类id查询菜品
+     *
      * @param categoryId
      * @return
      */
     @Override
     public List<Dish> selectByCategoryId(Long categoryId) {
         return dishMapper.selectByDishId(categoryId);
+    }
+
+    /**
+     * 根据套餐id查询菜品
+     *
+     * @param setmealId
+     * @return
+     */
+    @Override
+    public List<DishItemVO> selectBySetmealId(Long setmealId) {
+        List<DishItemVO> dishes = dishMapper.selectBySetmealId(setmealId);
+        return dishes;
     }
 }

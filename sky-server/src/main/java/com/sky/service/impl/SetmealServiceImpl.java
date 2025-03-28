@@ -178,13 +178,13 @@ public class SetmealServiceImpl implements SetmealService {
 
 
     /**
-     * 根据分类id查询套餐
-     * @param categoryId
+     * 动态条件查询
+     * @param setmeal
      * @return
      */
     @Override
-    public List<Setmeal> list(Long categoryId) {
-        List<Setmeal> setmeals =setMealMapper.selectByCategoryId(categoryId);
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> setmeals =setMealMapper.list(setmeal);
         return setmeals;
     }
 }

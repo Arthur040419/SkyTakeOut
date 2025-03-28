@@ -68,8 +68,16 @@ public interface SetMealMapper {
 
     /**
      * 根据分类id查询套餐
-     * @param categoryId
+     * @param setmeal
      * @return
      */
-    List<Setmeal> selectByCategoryId(Long categoryId);
+    List<Setmeal> selectByCategoryId(Setmeal setmeal);
+
+
+    /**
+     * 动态条件查询套餐
+     * @param setmeal
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
 }

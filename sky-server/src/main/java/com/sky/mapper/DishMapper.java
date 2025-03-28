@@ -75,4 +75,21 @@ public interface DishMapper {
      * @return
      */
     List<DishItemVO> selectBySetmealId(Long setmealId);
+
+
+    /**
+     * 条件查询菜品
+     * @param dish
+     * @return
+     */
+    List<DishVO> select(Dish dish);
+
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> selectByCategoryId(Long categoryId);
 }

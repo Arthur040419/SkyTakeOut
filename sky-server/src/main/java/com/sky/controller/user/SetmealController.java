@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
@@ -31,7 +32,7 @@ public class SetmealController {
 
 
     /**
-     * 根据分类id查询套餐
+     * 根据分类id查询起售中的套餐
      * @param categoryId
      * @return
      */
@@ -39,7 +40,11 @@ public class SetmealController {
     @ApiOperation("根据分类id查询套餐")
     public Result<List<Setmeal>> list(Long categoryId){
         log.info("根据分类id查询套餐");
-        List<Setmeal> setmeals = setmealService.list(categoryId);
+        Setmeal setmeal = Setmeal.builder()
+                .status(StatusConstant.ENABLE)
+                .categoryId(categoryId)
+                .build();
+        List<Setmeal> setmeals = setmealService.list(setmeal);
         return Result.success(setmeals);
 
     }

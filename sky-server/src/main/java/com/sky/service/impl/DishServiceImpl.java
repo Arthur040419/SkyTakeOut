@@ -181,17 +181,6 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 根据分类id查询菜品
-     *
-     * @param categoryId
-     * @return
-     */
-    @Override
-    public List<Dish> selectByCategoryId(Long categoryId) {
-        return dishMapper.selectByDishId(categoryId);
-    }
-
-    /**
      * 根据套餐id查询菜品
      *
      * @param setmealId
@@ -199,7 +188,41 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public List<DishItemVO> selectBySetmealId(Long setmealId) {
+
+
         List<DishItemVO> dishes = dishMapper.selectBySetmealId(setmealId);
+        return dishes;
+    }
+
+
+    /**
+     * 用户获取起售的菜品信息
+     * @param dish
+     * @return
+     */
+    @Override
+    public List<DishVO> userGetDishes(Dish dish) {
+        //查询菜品信息
+        List<DishVO> dishes = dishMapper.select(dish);
+        //查询菜品相关的口味信息
+
+        for (DishVO dishVO : dishes) {
+            List<DishFlavor> flavors = dishFlavorMapper.selectByDishID(dishVO.getId());
+            dishVO.setFlavors(flavors);
+        }
+        return dishes;
+    }
+
+
+    /**
+     * 根据分类查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> selectByCategoryId(Long categoryId) {
+        List<Dish> dishes = dishMapper.selectByCategoryId(categoryId);
+
         return dishes;
     }
 }

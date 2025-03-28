@@ -55,17 +55,25 @@ public interface DishService {
     void startOrStop(Integer status, Long id);
 
     /**
-     * 根据分类id查询菜品
-     * @param categoryId
-     * @return
-     */
-    List<Dish> selectByCategoryId(Long categoryId);
-
-
-    /**
      * 根据套餐id查询菜品
      * @param setmealId
      * @return
      */
     List<DishItemVO> selectBySetmealId(Long setmealId);
+
+
+    /**
+     * 用户获取起售菜品信息
+     * @param dish
+     * @return
+     */
+    List<DishVO> userGetDishes(Dish dish);
+
+
+    /**
+     * 根据分类查询菜品
+     * @param categoryId
+     * @return
+     */
+    List<Dish> selectByCategoryId(Long categoryId);
 }

@@ -41,8 +41,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
         if (shoppingCartList != null && shoppingCartList.size() > 0) {
             //如果已经加入购入车，就将数量加1
-            shoppingCart=shoppingCartList.get(0);
-            shoppingCart.setNumber(shoppingCart.getNumber()+1);
+            shoppingCart = shoppingCartList.get(0);
+            shoppingCart.setNumber(shoppingCart.getNumber() + 1);
             shoppingCartMapper.updateNumberById(shoppingCart);
             return;
         }
@@ -51,14 +51,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //先判断添加的是菜品还是套餐
         Long dishId = shoppingCart.getDishId();
         Long setmealId = shoppingCart.getSetmealId();
-        if(dishId!=null){
+        if (dishId != null) {
             //添加的是菜品
             Dish dish = dishMapper.selectById(dishId);
             shoppingCart.setName(dish.getName());
             shoppingCart.setAmount(dish.getPrice());
             shoppingCart.setImage(dish.getImage());
 
-        }else {
+        } else {
             //添加的是套餐
             Setmeal setmeal = setMealMapper.selectById(setmealId);
             shoppingCart.setName(setmeal.getName());
@@ -69,5 +69,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setNumber(1);
         shoppingCart.setCreateTime(LocalDateTime.now());
         shoppingCartMapper.add(shoppingCart);
+    }
+
+    /**
+     * 查看购物车
+     *
+     * @return
+     */
+    @Override
+    public List<ShoppingCart> showShoppingCart() {
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(BaseContext.getCurrentId())
+                .build();
+
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.showShoopingCart(shoppingCart);
+        return shoppingCartList;
     }
 }

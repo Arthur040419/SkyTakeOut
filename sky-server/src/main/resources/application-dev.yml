@@ -18,3 +18,7 @@ sky:
     bucket-name: arthur-sky-takeout
     region: cn-beijing
     file-path: dishImages/
+
+  wechat:
+    appid: wx29541454bc99e657
+    secret: 23db36ed9ff2e26c5b8e33c557ef5e08

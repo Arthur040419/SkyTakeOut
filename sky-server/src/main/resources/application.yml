@@ -42,9 +42,21 @@ sky:
     admin-ttl: 86400000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+    #设置用户端的jwt令牌配置信息
+    user-secret-key: toTheSky
+    #这里为了开发方便，先将令牌过期时间设置为12小时，完成开发后可以修改
+    user-ttl: 86400000
+    #与前端约定好的，不能写错
+    user-token-name: authentication
+
+
   alioss:
     endpoint: ${sky.alioss.endpoint}
     bucket-name: ${sky.alioss.bucket-name}
     region: ${sky.alioss.region}
     file-path: ${sky.alioss.file-path}
 
+  #配置小程序id和密钥
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}

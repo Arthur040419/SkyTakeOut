@@ -38,6 +38,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    //通过使用Spring Cache框架提供的注解来实现缓存
     @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     @ApiOperation("根据分类id查询套餐")
     public Result<List<Setmeal>> list(Long categoryId){

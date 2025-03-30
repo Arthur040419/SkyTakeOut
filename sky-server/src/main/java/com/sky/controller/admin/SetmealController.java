@@ -32,6 +32,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    //使用Spring Cache提供的注解来实现清除缓存功能
     @CacheEvict(cacheNames = "setmealCache",key = "#setmealDTO.categoryId")
     @ApiOperation("新增套餐")
     public Result save(@RequestBody SetmealDTO setmealDTO){
@@ -74,6 +75,7 @@ public class SetmealController {
      * @return
      */
     @PutMapping
+    //使用Spring Cache提供的注解来实现清除缓存功能
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @ApiOperation("更新套餐")
     public Result update(@RequestBody SetmealDTO setmealDTO){
@@ -89,6 +91,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{status}")
+    //使用Spring Cache提供的注解来实现清除缓存功能
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @ApiOperation("套餐启用、禁用")
     public Result startOrStop(@PathVariable Integer status,Long id){
@@ -105,6 +108,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    //使用Spring Cache提供的注解来实现清除缓存功能
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
     @ApiOperation("批量删除套餐")
     public Result deleteBatch(@RequestParam List<Long> ids){

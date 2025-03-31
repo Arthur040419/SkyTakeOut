@@ -52,4 +52,10 @@ public interface ShoppingCartMapper {
      * @param shoppingCart
      */
     void sub(ShoppingCart shoppingCart);
+
+    /**
+     * 批量添加商品到购物车
+     * @param shoppingCarts
+     */
+    void addBatch(List<ShoppingCart> shoppingCarts);
 }

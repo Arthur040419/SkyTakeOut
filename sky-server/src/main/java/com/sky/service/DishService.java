@@ -5,6 +5,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.DishVO;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface DishService {
 
     /**
      * 保存菜品
+     *
      * @param dishDTO
      */
     void saveDishAndFlavor(DishDTO dishDTO);
@@ -21,6 +23,7 @@ public interface DishService {
 
     /**
      * 菜品分页查询
+     *
      * @param dishPageQueryDTO
      * @return
      */
@@ -29,12 +32,14 @@ public interface DishService {
 
     /**
      * 批量删除菜品
+     *
      * @param ids
      */
     void deleteByIds(List<Long> ids);
 
     /**
      * 根据id查询菜品信息
+     *
      * @param id
      * @return
      */
@@ -43,12 +48,14 @@ public interface DishService {
 
     /**
      * 更新菜品
+     *
      * @param dishDTO
      */
     void updateWithFlavor(DishDTO dishDTO);
 
     /**
      * 菜品起售、停售
+     *
      * @param status
      * @param id
      */
@@ -56,6 +63,7 @@ public interface DishService {
 
     /**
      * 根据套餐id查询菜品
+     *
      * @param setmealId
      * @return
      */
@@ -64,6 +72,7 @@ public interface DishService {
 
     /**
      * 用户获取起售菜品信息
+     *
      * @param dish
      * @return
      */
@@ -72,8 +81,15 @@ public interface DishService {
 
     /**
      * 根据分类查询菜品
+     *
      * @param categoryId
      * @return
      */
     List<Dish> selectByCategoryId(Long categoryId);
+
+    /**
+     * 根据菜品状态查询菜品数量
+     * @return
+     */
+    DishOverViewVO countByStatus();
 }

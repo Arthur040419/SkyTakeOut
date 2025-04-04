@@ -14,6 +14,7 @@ import com.sky.mapper.SetMealMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.SetmealOverViewVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,5 +187,22 @@ public class SetmealServiceImpl implements SetmealService {
     public List<Setmeal> list(Setmeal setmeal) {
         List<Setmeal> setmeals =setMealMapper.list(setmeal);
         return setmeals;
+    }
+
+    /**
+     * 查询套餐总览
+     * @return
+     */
+    @Override
+    public SetmealOverViewVO countSetmeals() {
+        //已停售套餐数量
+        Integer discontinued = setMealMapper.countSetMealByStatus(StatusConstant.DISABLE);
+        //已起售套餐数量
+        Integer sold = setMealMapper.countSetMealByStatus(StatusConstant.ENABLE);
+        return SetmealOverViewVO
+                .builder()
+                .discontinued(discontinued)
+                .sold(sold)
+                .build();
     }
 }

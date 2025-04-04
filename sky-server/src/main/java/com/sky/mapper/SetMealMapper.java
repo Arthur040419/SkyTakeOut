@@ -80,4 +80,12 @@ public interface SetMealMapper {
      * @return
      */
     List<Setmeal> list(Setmeal setmeal);
+
+    /**
+     * 根据起售状态查询套餐数量
+     * @param status
+     * @return
+     */
+    @Select("select count(0) from setmeal where status=#{status}")
+    Integer countSetMealByStatus(Integer status);
 }

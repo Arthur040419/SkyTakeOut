@@ -2,10 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.*;
 import com.sky.result.PageResult;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.*;
 
 public interface OrderService {
 
@@ -103,4 +100,10 @@ public interface OrderService {
      * @param id
      */
     void reminder(Long id);
+
+    /**
+     * 查询订单管理数据
+     * @return
+     */
+    OrderOverViewVO countOrdersByStatus();
 }

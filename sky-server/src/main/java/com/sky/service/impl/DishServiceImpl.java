@@ -15,6 +15,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,5 +225,22 @@ public class DishServiceImpl implements DishService {
         List<Dish> dishes = dishMapper.selectByCategoryId(categoryId);
 
         return dishes;
+    }
+
+    /**
+     * 根据菜品状态查询菜品数量
+     * @return
+     */
+    @Override
+    public DishOverViewVO countByStatus() {
+        //查询停售菜品数量
+        Integer discontinued = dishMapper.countByStatus(StatusConstant.DISABLE);
+        //查询起售菜品数量
+        Integer sold = dishMapper.countByStatus(StatusConstant.ENABLE);
+        return DishOverViewVO
+                .builder()
+                .discontinued(discontinued)
+                .sold(sold)
+                .build();
     }
 }

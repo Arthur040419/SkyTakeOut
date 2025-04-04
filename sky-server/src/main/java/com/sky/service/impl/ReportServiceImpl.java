@@ -36,16 +36,15 @@ public class ReportServiceImpl implements ReportService {
     /**
      * 营业额统计
      *
-     * @param start
+     * @param begin
      * @param end
      * @return
      */
     @Override
-    public TurnoverReportVO turnoverReport(LocalDate start, LocalDate end) {
+    public TurnoverReportVO turnoverReport(LocalDate begin, LocalDate end) {
         //封装dateList
         List<LocalDate> time = new ArrayList<>();
-        time.add(start);
-        LocalDate begin = start;
+        time.add(begin);
         while (!begin.equals(end)) {
             begin = begin.plusDays(1);
             time.add(begin);
@@ -59,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
             LocalDateTime startTime = LocalDateTime.of(date, LocalTime.MIN);
             LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
             Map<String, Object> map = new HashMap<>();
-            map.put("start", startTime);
+            map.put("begin", startTime);
             map.put("end", endTime);
             map.put("status", Orders.COMPLETED);
             Double amount = orderMapper.getTurnoverByMap(map);
@@ -80,17 +79,17 @@ public class ReportServiceImpl implements ReportService {
     /**
      * 用户统计
      *
-     * @param start
+     * @param begin
      * @param end
      * @return
      */
     @Override
-    public UserReportVO userReport(LocalDate start, LocalDate end) {
+    public UserReportVO userReport(LocalDate begin, LocalDate end) {
         List<LocalDate> dateList = new ArrayList<>();
-        dateList.add(start);
-        while (!start.equals(end)) {
-            start = start.plusDays(1);
-            dateList.add(start);
+        dateList.add(begin);
+        while (!begin.equals(end)) {
+            begin = begin.plusDays(1);
+            dateList.add(begin);
         }
 
         //存放每天的新增用户数量
@@ -106,7 +105,7 @@ public class ReportServiceImpl implements ReportService {
             allUserCount.add(allUsers);
 
             //统计新用户
-            map.put("start", LocalDateTime.of(date, LocalTime.MIN));
+            map.put("begin", LocalDateTime.of(date, LocalTime.MIN));
             Integer newUsers = userMapper.countUser(map);
             newUserCount.add(newUsers);
 

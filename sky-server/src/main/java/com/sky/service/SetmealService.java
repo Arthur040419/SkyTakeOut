@@ -4,6 +4,7 @@ import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
+import com.sky.vo.SetmealOverViewVO;
 import com.sky.vo.SetmealVO;
 
 import java.util.List;
@@ -58,4 +59,10 @@ public interface SetmealService {
      * @return
      */
     List<Setmeal> list(Setmeal setmeal);
+
+    /**
+     * 查询套餐总览
+     * @return
+     */
+    SetmealOverViewVO countSetmeals();
 }

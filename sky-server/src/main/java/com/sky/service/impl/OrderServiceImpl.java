@@ -14,10 +14,7 @@ import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.*;
 import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -493,5 +492,39 @@ public class OrderServiceImpl implements OrderService {
         String json = JSON.toJSONString(map);
         webSocketServer.sendToAllClient(json);
 
+    }
+
+    /**
+     * 查询订单管理数据
+     * @return
+     */
+    @Override
+    public OrderOverViewVO countOrdersByStatus() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("begin",LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        map.put("end",LocalDateTime.of(LocalDate.now(),LocalTime.MAX));
+        //查询全部订单
+        Integer allOrders = orderMapper.countByMap(map);
+        map.put("status",Orders.CANCELLED);
+        //查询取消订单数量
+        Integer cancelledOrders = orderMapper.countByMap(map);
+        //查询已完成数量
+        map.put("status",Orders.COMPLETED);
+        Integer completedOrders = orderMapper.countByMap(map);
+        //查询待派送数量
+        map.put("status",Orders.CONFIRMED);
+        Integer deliveredOrders = orderMapper.countByMap(map);
+        //查询待接单数量
+        map.put("status",Orders.TO_BE_CONFIRMED);
+        Integer waitingOrders = orderMapper.countByMap(map);
+
+        return OrderOverViewVO
+                .builder()
+                .allOrders(allOrders)
+                .cancelledOrders(cancelledOrders)
+                .completedOrders(completedOrders)
+                .deliveredOrders(deliveredOrders)
+                .waitingOrders(waitingOrders)
+                .build();
     }
 }

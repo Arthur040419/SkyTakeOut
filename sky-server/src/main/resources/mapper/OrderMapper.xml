@@ -49,8 +49,8 @@
     <select id="getTurnoverByMap" resultType="java.lang.Double">
         select sum(amount) from orders
         <where>
-            <if test="start!=null and end!=null">
-                and order_time between #{start} and #{end}
+            <if test="begin!=null and end!=null">
+                and order_time between #{begin} and #{end}
             </if>
             <if test="status!=null">
                 and status = #{status}

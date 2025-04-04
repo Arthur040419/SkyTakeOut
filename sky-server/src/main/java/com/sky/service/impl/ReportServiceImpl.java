@@ -6,15 +6,19 @@ import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.service.WorkSpaceService;
+import com.sky.vo.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,6 +37,8 @@ public class ReportServiceImpl implements ReportService {
     UserMapper userMapper;
     @Autowired
     OrderDetailMapper orderDetailMapper;
+    @Autowired
+    WorkSpaceService workSpaceService;
 
     /**
      * 营业额统计
@@ -181,7 +187,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public SalesTop10ReportVO salesTop10(LocalDate begin, LocalDate end) {
-        List<GoodsSalesDTO> sales = orderDetailMapper.getTop10(LocalDateTime.of(begin,LocalTime.MIN), LocalDateTime.of(end,LocalTime.MAX));
+        List<GoodsSalesDTO> sales = orderDetailMapper.getTop10(LocalDateTime.of(begin, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
         //封装查询结果
         List<String> nameList = new ArrayList<>();
         List<Integer> numberList = new ArrayList<>();
@@ -197,17 +203,72 @@ public class ReportServiceImpl implements ReportService {
         numberList = sales.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
         return SalesTop10ReportVO
                 .builder()
-                .nameList(StringUtils.join(nameList,','))
-                .numberList(StringUtils.join(numberList,','))
+                .nameList(StringUtils.join(nameList, ','))
+                .numberList(StringUtils.join(numberList, ','))
                 .build();
     }
 
     /**
      * 导出Excel报表
+     *
      * @param response
      */
     @Override
     public void exportBusinessData(HttpServletResponse response) {
+
+
+        //获取Excel模板文件
+        // TODO 优化一下读取resource文件夹下文件的方式
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
+        try {
+            XSSFWorkbook excel = new XSSFWorkbook(in);
+            //获取近30天的基本运营数据
+            LocalDate beginDay = LocalDate.now().minusDays(30);
+            LocalDate endDay = LocalDate.now().minusDays(1);
+            BusinessDataVO businessData = workSpaceService.businessData(LocalDateTime.of(beginDay, LocalTime.MIN), LocalDateTime.of(endDay, LocalTime.MAX));
+
+            //填入相关数据
+            XSSFSheet sheet = excel.getSheet("sheet1");
+            XSSFRow row = sheet.getRow(1);
+            row.getCell(1).setCellValue("时间：" + beginDay + "至" + endDay);
+
+            row = sheet.getRow(3);
+            row.getCell(2).setCellValue(businessData.getTurnover());
+            row.getCell(4).setCellValue(businessData.getOrderCompletionRate());
+            row.getCell(6).setCellValue(businessData.getNewUsers());
+
+            row = sheet.getRow(4);
+            row.getCell(2).setCellValue(businessData.getValidOrderCount());
+            row.getCell(4).setCellValue(businessData.getUnitPrice());
+
+
+            //遍历近30天，每天的运营数据
+            for (int i = 0; i < 30; i++) {
+                LocalDate date = beginDay.plusDays(i);
+                businessData = workSpaceService.businessData(LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
+                row = sheet.getRow(7+i);
+                row.getCell(1).setCellValue(date.toString());
+                row.getCell(2).setCellValue(businessData.getTurnover());
+                row.getCell(3).setCellValue(businessData.getValidOrderCount());
+                row.getCell(4).setCellValue(businessData.getOrderCompletionRate());
+                row.getCell(5).setCellValue(businessData.getUnitPrice());
+                row.getCell(6).setCellValue(businessData.getNewUsers());
+
+            }
+
+            //向客户端输出文件
+            ServletOutputStream outputStream = response.getOutputStream();
+            excel.write(outputStream);
+
+            //关闭资源
+            outputStream.close();
+            excel.close();
+            in.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 }

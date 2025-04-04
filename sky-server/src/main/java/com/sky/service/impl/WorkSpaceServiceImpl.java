@@ -56,22 +56,18 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
         //有效订单数
         map.put("status", Orders.COMPLETED);
         Integer validOrders = orderMapper.countByMap(map);
-        Double orderCompletionRate;
+        Double orderCompletionRate=0.0;
         if (totalOrders != 0 && validOrders != 0) {
             //订单完成率
             orderCompletionRate = validOrders.doubleValue() / totalOrders.doubleValue();
-        }else{
-            orderCompletionRate = Double.MIN_NORMAL;
         }
-
         //统计营业额
         Double turnover = orderMapper.getTurnoverByMap(map);
+        turnover=turnover==null?0.0:turnover;
 
         //统计平均客单价
-        Double unitPrice;
-        if(validOrders==0){
-            unitPrice=0.0;
-        }else{
+        Double unitPrice=0.0;
+        if(turnover!=0.0&&validOrders!=0){
             unitPrice = turnover.doubleValue() / validOrders.doubleValue();
         }
         //保留两位小数

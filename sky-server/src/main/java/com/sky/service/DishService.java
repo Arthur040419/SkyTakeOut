@@ -87,9 +87,5 @@ public interface DishService {
      */
     List<Dish> selectByCategoryId(Long categoryId);
 
-    /**
-     * 根据菜品状态查询菜品数量
-     * @return
-     */
-    DishOverViewVO countByStatus();
+
 }

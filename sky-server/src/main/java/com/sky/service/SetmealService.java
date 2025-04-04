@@ -60,9 +60,5 @@ public interface SetmealService {
      */
     List<Setmeal> list(Setmeal setmeal);
 
-    /**
-     * 查询套餐总览
-     * @return
-     */
-    SetmealOverViewVO countSetmeals();
+
 }

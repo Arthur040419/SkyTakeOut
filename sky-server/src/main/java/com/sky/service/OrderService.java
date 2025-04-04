@@ -101,9 +101,5 @@ public interface OrderService {
      */
     void reminder(Long id);
 
-    /**
-     * 查询订单管理数据
-     * @return
-     */
-    OrderOverViewVO countOrdersByStatus();
+
 }

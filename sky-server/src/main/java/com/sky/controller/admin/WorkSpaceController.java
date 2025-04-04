@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @RestController
 @RequestMapping("/admin/workspace")
 @Api(tags = "工作台相关接口")
@@ -27,13 +31,6 @@ public class WorkSpaceController {
 
     @Autowired
     WorkSpaceService workSpaceService;
-    @Autowired
-    SetmealService setmealService;
-    @Autowired
-    DishService dishService;
-    @Autowired
-    OrderService orderService;
-
 
     /**
      * 查询今日运营数据
@@ -43,7 +40,9 @@ public class WorkSpaceController {
     @ApiOperation("查询今日运营数据")
     public Result<BusinessDataVO> businessData(){
         log.info("查询今日运营数据");
-        return Result.success(workSpaceService.businessData());
+        LocalDateTime begin = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        return Result.success(workSpaceService.businessData(begin,end));
     }
 
 
@@ -55,7 +54,7 @@ public class WorkSpaceController {
     @ApiOperation("查询套餐总览")
     public Result<SetmealOverViewVO> overviewSetmeals(){
         log.info("查询套餐总览");
-        return Result.success(setmealService.countSetmeals());
+        return Result.success(workSpaceService.countSetmeals());
     }
 
     /**
@@ -66,7 +65,7 @@ public class WorkSpaceController {
     @ApiOperation("查询菜品总览")
     public Result<DishOverViewVO> overviewDishes(){
         log.info("查询菜品总览");
-        return Result.success(dishService.countByStatus());
+        return Result.success(workSpaceService.countByStatus());
     }
 
     /**
@@ -77,7 +76,7 @@ public class WorkSpaceController {
     @ApiOperation("查询订单管理数据")
     public Result<OrderOverViewVO> overviewOrders(){
         log.info("查询订单管理数据");
-        return Result.success(orderService.countOrdersByStatus());
+        return Result.success(workSpaceService.countOrdersByStatus());
     }
 
 }
